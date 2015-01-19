@@ -37,6 +37,52 @@
 @property (readonly, nonatomic, strong) id responseCSV;
 
 
+///----------------------------
+/// @name Configure
+///----------------------------
+
+/**
+ The delimiter character to be used when parsing the string. Must not be @c nil, and may not be the double quote character. Default is comma (',')
+ */
+@property (nonatomic, assign) unichar delimiter;
+
+/**
+ *  If @c YES, then the parser will removing surrounding double quotes and will unescape characters.
+ *  The default value is @c NO.
+ *  @warning Do not mutate this property after parsing has begun
+ */
+@property (nonatomic, assign) BOOL sanitizesFields;
+
+/**
+ *  If @c YES, then the parser will trim whitespace around fields. If @c sanitizesFields is also @c YES,
+ *  then the sanitized field is also trimmed. The default value is @c NO.
+ *  @warning Do not mutate this property after parsing has begun
+ */
+@property (nonatomic, assign) BOOL trimsWhitespace;
+
+/**
+ *  If @c YES, then the parser will allow special characters (delimiter, newline, quote, etc)
+ *  to be escaped within a field using a backslash character. The default value is @c NO.
+ *  @warning Do not mutate this property after parsing has begun
+ */
+@property (nonatomic, assign) BOOL recognizesBackslashesAsEscapes;
+
+/**
+ *  If @c YES, then the parser will interpret any field that begins with an octothorpe as a comment.
+ *  Comments are terminated using an unescaped newline character. The default value is @c NO.
+ *  @warning Do not mutate this property after parsing has begun
+ */
+@property (nonatomic, assign) BOOL recognizesComments;
+
+/**
+ *  If @c YES, then quoted fields may begin with an equal sign.
+ *  Some programs produce fields with a leading equal sign to indicate that the contents must be represented exactly.
+ *  The default value is @c NO.
+ *  @warning Do not mutate this property after parsing has begun
+ */
+@property (nonatomic, assign) BOOL recognizesLeadingEqualSign;
+
+
 ///----------------------------------
 /// @name Creating Request Operations
 ///----------------------------------

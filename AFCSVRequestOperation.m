@@ -50,6 +50,12 @@ static dispatch_queue_t csv_request_operation_processing_queue() {
                                        failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id CSV))failure
 {
     AFCSVRequestOperation *requestOperation = [(AFCSVRequestOperation *)[self alloc] initWithRequest:urlRequest];
+    requestOperation.delimiter = ',';
+    requestOperation.recognizesComments = NO;
+    requestOperation.recognizesBackslashesAsEscapes = NO;
+    requestOperation.sanitizesFields = NO;
+    requestOperation.trimsWhitespace = NO;
+    requestOperation.recognizesLeadingEqualSign = NO;
     [requestOperation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(operation.request, operation.response, responseObject);
@@ -70,7 +76,12 @@ static dispatch_queue_t csv_request_operation_processing_queue() {
         NSError *error = nil;
         
         // use the lib to parse the data
-        CHCSVParser *parser = [[CHCSVParser alloc] initWithCSVString:self.responseString];
+        CHCSVParser *parser = [[CHCSVParser alloc] initWithDelimitedString:self.responseString delimiter:self.delimiter];
+        parser.sanitizesFields = self.sanitizesFields;
+        parser.trimsWhitespace = self.trimsWhitespace;
+        parser.recognizesBackslashesAsEscapes = self.recognizesBackslashesAsEscapes;
+        parser.recognizesComments = self.recognizesComments;
+        parser.recognizesLeadingEqualSign = self.recognizesLeadingEqualSign;
         parser.delegate = self;
         [parser parse];
         
